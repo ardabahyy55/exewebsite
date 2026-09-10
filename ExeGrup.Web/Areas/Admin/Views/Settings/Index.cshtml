@@ -1,0 +1,65 @@
+@model SettingsFormViewModel
+@{
+    ViewData["Title"] = "Site Ayarları";
+}
+<div class="apage-head">
+    <div><h1>Site Ayarları</h1><p>Bu bilgiler sitenin tamamında otomatik güncellenir.</p></div>
+</div>
+
+<form method="post" enctype="multipart/form-data" action="/ardabahaadmin/ayarlar" class="aform">
+    @Html.AntiForgeryToken()
+
+    <div class="acard">
+        <div class="acard-head"><h2>Genel</h2></div>
+        <div class="aform-grid">
+            <div class="afield"><label>Firma Adı</label><input asp-for="CompanyName" /></div>
+            <div class="afield"><label>Alt Marka</label><input asp-for="CompanySubBrand" /></div>
+            <div class="afield span2"><label>Footer Açıklaması</label><input asp-for="FooterText" /></div>
+        </div>
+    </div>
+
+    <div class="acard">
+        <div class="acard-head"><h2>İletişim</h2></div>
+        <div class="aform-grid">
+            <div class="afield"><label>Telefon (görünen)</label><input asp-for="PhoneDisplay" /></div>
+            <div class="afield"><label>Telefon (tel: linki)</label><input asp-for="PhoneLink" placeholder="+905405505255" /></div>
+            <div class="afield"><label>WhatsApp Linki</label><input asp-for="WhatsAppLink" placeholder="https://wa.me/905405505255" /></div>
+            <div class="afield"><label>WhatsApp Mesajı</label><input asp-for="WhatsAppMessage" /></div>
+            <div class="afield"><label>E-posta</label><input asp-for="Email" /></div>
+            <div class="afield"><label>Instagram</label><input asp-for="Instagram" /></div>
+            <div class="afield span2"><label>Adres</label><textarea asp-for="Address" rows="3"></textarea></div>
+            <div class="afield span2"><label>Google Maps iframe adresi</label><input asp-for="MapsEmbed" /></div>
+        </div>
+    </div>
+
+    <div class="acard">
+        <div class="acard-head"><h2>Görseller</h2></div>
+        <div class="aform-grid">
+            <div class="afield">
+                <label>Logo</label>
+                @if (!string.IsNullOrWhiteSpace(Settings.Get("LogoPath")))
+                {
+                    <img class="aupload-preview" src="@Settings.Get("LogoPath")" alt="Logo" loading="lazy" />
+                }
+                <input asp-for="LogoFile" type="file" accept=".jpg,.jpeg,.png,.webp" />
+                <small class="ahint">Boş bırakılırsa tipografik logo kullanılır.</small>
+            </div>
+            <div class="afield">
+                <label>Favicon</label>
+                <input asp-for="FaviconFile" type="file" accept=".jpg,.jpeg,.png,.webp" />
+                <small class="ahint">Boş bırakılırsa varsayılan favicon kullanılır.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="acard">
+        <div class="acard-head"><h2>SEO</h2></div>
+        <div class="aform-grid">
+            <div class="afield span2"><label>Site URL</label><input asp-for="SiteUrl" placeholder="https://www.exegrup.com.tr" /></div>
+            <div class="afield span2"><label>Varsayılan SEO Title</label><input asp-for="SeoTitle" /></div>
+            <div class="afield span2"><label>Varsayılan SEO Description</label><textarea asp-for="SeoDescription" rows="2"></textarea></div>
+        </div>
+    </div>
+
+    <button type="submit" class="abtn abtn-primary">Ayarları Kaydet</button>
+</form>

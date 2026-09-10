@@ -1,0 +1,46 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Yönetim Girişi";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Yönetim Girişi — EXE GRUP</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-login-body">
+    <div class="login-card">
+        <div class="login-brand">
+            <span class="brand-mark">E<span class="brand-dot">.</span></span>
+            <div>
+                <strong>EXE GRUP</strong>
+                <span>tabela.exe — Yönetim Paneli</span>
+            </div>
+        </div>
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+        {
+            <div class="aalert aalert-error">@Html.ValidationSummary(false)</div>
+        }
+
+        <form asp-area="Admin" asp-controller="Auth" asp-action="Login" method="post">
+            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+            <div class="afield">
+                <label asp-for="Username">Kullanıcı Adı</label>
+                <input asp-for="Username" autocomplete="username" autofocus />
+            </div>
+            <div class="afield">
+                <label asp-for="Password">Şifre</label>
+                <input asp-for="Password" autocomplete="current-password" />
+            </div>
+            <button type="submit" class="abtn abtn-primary abtn-wide">Giriş Yap</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+@model List<GalleryImage>
+@{
+    ViewData["Title"] = "Galeri";
+    var categories = new List<string> { "Dış Mekan Tabela", "Kompozit", "Kutu Harf", "Işıklı Tabela", "Cephe Uygulamaları" };
+}
+<div class="apage-head">
+    <div><h1>Galeri</h1><p>@Model.Count görsel.</p></div>
+</div>
+
+<div class="acard">
+    <div class="acard-head"><h2>Görsel yükle</h2></div>
+    <form method="post" enctype="multipart/form-data" action="/ardabahaadmin/galeri/yukle" class="aform">
+        @Html.AntiForgeryToken()
+        <div class="aform-grid">
+            <div class="afield">
+                <label>Dosyalar (çoklu seçim)</label>
+                <input type="file" name="files" accept=".jpg,.jpeg,.png,.webp" multiple />
+            </div>
+            <div class="afield">
+                <label>Kategori</label>
+                <select name="category">
+                    @foreach (var c in categories)
+                    {
+                        <option value="@c">@c</option>
+                    }
+                </select>
+            </div>
+            <div class="afield">
+                <label>Başlık (opsiyonel)</label>
+                <input type="text" name="title" />
+            </div>
+        </div>
+        <button type="submit" class="abtn abtn-primary">Yükle</button>
+    </form>
+</div>
+
+<div class="acard">
+    <div class="acard-head"><h2>Galeri görselleri</h2></div>
+    @if (Model.Any())
+    {
+        <div class="aimage-grid">
+            @foreach (var g in Model)
+            {
+                <div class="aimage-item">
+                    <img src="@g.ImagePath" alt="" loading="lazy" />
+                    <span class="gallery-tag">@g.Category</span>
+                    <form method="post" action="/ardabahaadmin/galeri/sil/@g.Id" onsubmit="return confirm('Bu görseli silmek istediğinize emin misiniz?')">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="abtn abtn-sm abtn-danger">Sil</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="aempty">Galeride henüz görsel yok.</p>
+    }
+</div>

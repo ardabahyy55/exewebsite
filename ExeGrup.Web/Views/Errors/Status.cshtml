@@ -1,0 +1,21 @@
+@model int
+@{
+    ViewData["ActiveNav"] = "";
+    var is404 = Model == 404;
+    var wa = Settings.WaLink();
+}
+<section class="error-page">
+    <div class="container error-inner">
+        <p class="error-code">@Model</p>
+        <h1>@(is404 ? "Aradığınız sayfa bulunamadı." : "Bir şeyler ters gitti.")</h1>
+        <p class="error-sub">
+            @(is404
+                ? "Adres değişmiş ya da kaldırılmış olabilir. Sitemizde aradığınızı bulamadıysanız bizimle iletişime geçebilirsiniz."
+                : "Beklenmeyen bir hata oluştu. Lütfen birazdan tekrar deneyin.")
+        </p>
+        <div class="error-actions">
+            <a class="btn btn-primary btn-lg" href="/">Anasayfaya Dön</a>
+            <a class="btn btn-ghost btn-lg" href="@wa" target="_blank" rel="noopener">WhatsApp'tan Yazın</a>
+        </div>
+    </div>
+</section>

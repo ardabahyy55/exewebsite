@@ -1,0 +1,77 @@
+@model List<Service>
+@{
+    var company = Settings.Get("CompanyName", "EXE GRUP");
+    var subBrand = Settings.Get("CompanySubBrand", "tabela.exe");
+    var wa = Settings.WaLink();
+}
+<footer class="site-footer">
+    <div class="container footer-grid">
+        <div class="footer-brand">
+            <div class="footer-logo">
+                <span class="brand-mark">E<span class="brand-dot">.</span></span>
+                <span class="brand-text">
+                    <span class="brand-top">@company</span>
+                    <span class="brand-main">@subBrand</span>
+                </span>
+            </div>
+            <p>@Settings.Get("FooterText", "Dış Mekan Tabela ve Reklam Çözümleri")</p>
+            <a class="footer-ig" href="@Settings.Get("Instagram", "")" target="_blank" rel="noopener">
+                <partial name="_Icon" model='"instagram"' />
+                <span>instagram&#47;@subBrand</span>
+            </a>
+        </div>
+
+        <div>
+            <h4 class="footer-title">Hızlı Menü</h4>
+            <ul class="footer-links">
+                <li><a href="/">Ana Sayfa</a></li>
+                <li><a href="/hizmetler">Hizmetler</a></li>
+                <li><a href="/projeler">Projeler</a></li>
+                <li><a href="/galeri">Galeri</a></li>
+                <li><a href="/hakkimizda">Hakkımızda</a></li>
+                <li><a href="/iletisim">İletişim</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="footer-title">Hizmetler</h4>
+            <ul class="footer-links">
+                @foreach (var s in Model)
+                {
+                    <li><a href="/@s.Slug">@s.Title</a></li>
+                }
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="footer-title">İletişim</h4>
+            <ul class="footer-links footer-contact">
+                <li>
+                    <a href="tel:@Settings.Get("PhoneLink", "+905405505255")">
+                        <partial name="_Icon" model='"phone"' /><span>@Settings.Get("PhoneDisplay", "0540 550 52 55")</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@wa" target="_blank" rel="noopener">
+                        <partial name="_Icon" model='"whatsapp"' /><span>WhatsApp</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="mailto:@Settings.Get("Email", "")">
+                        <partial name="_Icon" model='"mail"' /><span>@Settings.Get("Email", "")</span>
+                    </a>
+                </li>
+                <li class="footer-address">
+                    <partial name="_Icon" model='"pin"' />
+                    <span>@Html.Raw(Html.Encode(Settings.Get("Address", "")).Replace("\n", "<br />").Replace("\r", ""))</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2026 @company — @subBrand. Tüm hakları saklıdır.</p>
+        </div>
+    </div>
+</footer>

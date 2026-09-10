@@ -1,0 +1,35 @@
+@model ChangeAccountViewModel
+@{
+    ViewData["Title"] = "Admin Hesabı";
+}
+<div class="apage-head">
+    <div><h1>Admin Hesabı</h1><p>Kullanıcı adı ve şifre yönetimi. Şifreler veritabanında hash olarak saklanır.</p></div>
+</div>
+
+<form method="post" action="/ardabahaadmin/hesap" class="acard aform">
+    @Html.AntiForgeryToken()
+    <div class="aform-grid">
+        <div class="afield span2">
+            <label asp-for="CurrentPassword">Mevcut Şifre *</label>
+            <input asp-for="CurrentPassword" type="password" autocomplete="current-password" />
+            <span asp-validation-for="CurrentPassword" class="aerror"></span>
+        </div>
+        <div class="afield">
+            <label asp-for="NewUsername">Yeni Kullanıcı Adı</label>
+            <input asp-for="NewUsername" />
+            <span asp-validation-for="NewUsername" class="aerror"></span>
+        </div>
+        <div class="afield">
+            <label asp-for="NewPassword">Yeni Şifre (min. 8 karakter)</label>
+            <input asp-for="NewPassword" type="password" autocomplete="new-password" />
+            <span asp-validation-for="NewPassword" class="aerror"></span>
+        </div>
+        <div class="afield">
+            <label asp-for="NewPasswordConfirm">Yeni Şifre (tekrar)</label>
+            <input asp-for="NewPasswordConfirm" type="password" autocomplete="new-password" />
+            <span asp-validation-for="NewPasswordConfirm" class="aerror"></span>
+        </div>
+    </div>
+    <div asp-validation-summary="All" class="aerror"></div>
+    <button type="submit" class="abtn abtn-primary">Güncelle</button>
+</form>

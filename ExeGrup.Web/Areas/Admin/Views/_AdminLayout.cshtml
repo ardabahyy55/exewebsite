@@ -1,0 +1,71 @@
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var wa = Settings.WaLink();
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>@(ViewData["Title"] ?? "Yönetim") — EXE GRUP Yönetim</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar">
+        <a class="admin-brand" href="/ardabahaadmin/dashboard">
+            <span class="brand-mark">E<span class="brand-dot">.</span></span>
+            <span class="brand-text">
+                <span class="brand-top">EXE GRUP</span>
+                <span class="brand-main">tabela.exe — Yönetim</span>
+            </span>
+        </a>
+        <nav class="admin-nav">
+            <a href="/ardabahaadmin/dashboard" class="@(currentController == "Dashboard" ? "active" : "")">Kontrol Paneli</a>
+            <a href="/ardabahaadmin/projeler" class="@(currentController == "Projects" ? "active" : "")">Projeler</a>
+            <a href="/ardabahaadmin/hizmetler" class="@(currentController == "Services" ? "active" : "")">Hizmetler</a>
+            <a href="/ardabahaadmin/galeri" class="@(currentController == "Gallery" ? "active" : "")">Galeri</a>
+            <a href="/ardabahaadmin/medya" class="@(currentController == "Media" ? "active" : "")">Medya Kütüphanesi</a>
+            <a href="/ardabahaadmin/mesajlar" class="@(currentController == "Messages" ? "active" : "")">
+                Mesajlar
+                @if (ViewBag.UnreadMessages is int unread && unread > 0)
+                {
+                    <span class="nav-badge">@unread</span>
+                }
+            </a>
+            <a href="/ardabahaadmin/ayarlar" class="@(currentController == "Settings" ? "active" : "")">Site Ayarları</a>
+            <a href="/ardabahaadmin/hesap" class="@(currentController == "Account" ? "active" : "")">Admin Hesabı</a>
+        </nav>
+        <form asp-area="Admin" asp-controller="Auth" asp-action="Logout" method="post" class="admin-logout">
+            <button type="submit" class="abtn abtn-outline">Çıkış Yap</button>
+        </form>
+    </aside>
+
+    <div class="admin-main">
+        <header class="admin-topbar">
+            <button class="admin-toggle" id="adminToggle" type="button" aria-label="Menü">☰</button>
+            <div class="admin-topbar-right">
+                <a href="/" target="_blank" class="abtn abtn-ghost" rel="noopener">Siteyi Görüntüle ↗</a>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            @if (TempData["Success"] is string ok)
+            {
+                <div class="aalert aalert-success">@ok</div>
+            }
+            @if (TempData["Error"] is string err)
+            {
+                <div class="aalert aalert-error">@err</div>
+            }
+            @RenderBody()
+        </div>
+    </div>
+</div>
+<script src="~/js/admin.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

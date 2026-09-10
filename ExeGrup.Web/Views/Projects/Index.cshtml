@@ -1,0 +1,37 @@
+@model List<Project>
+@{
+    ViewData["ActiveNav"] = "projeler";
+    var wa = Settings.WaLink();
+}
+<partial name="_PageHead" model='("Projeler", "Tamamladığımız tabela ve dış cephe reklam uygulamaları — Samsun.")' />
+
+<section class="section">
+    <div class="container">
+        @if (Model.Any())
+        {
+            <div class="projects-grid">
+                @foreach (var p in Model)
+                {
+                    <a class="project-card" href="/projeler/@p.Slug">
+                        <div class="card-media">
+                            <img src="@(string.IsNullOrWhiteSpace(p.CoverImage) ? "/images/placeholder.svg" : p.CoverImage)"
+                                 alt="@p.Name" loading="lazy" width="640" height="420" />
+                        </div>
+                        <div class="project-meta">
+                            <span class="chip">@p.Category</span>
+                            <h3>@p.Name</h3>
+                            <p>@p.ShortDescription</p>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-note">
+                <p>Projelerimiz kısa sürede bu sayfada yayınlanacak.</p>
+                <a class="btn btn-primary" href="@wa" target="_blank" rel="noopener"><partial name="_Icon" model='"whatsapp"' /> Bu arada WhatsApp'tan yazın</a>
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,97 @@
+@model ContactFormViewModel
+@{
+    var wa = Settings.WaLink();
+    var map = Settings.Get("MapsEmbed", "");
+    var returnUrl = ViewData["ContactReturnUrl"] as string ?? "/iletisim";
+}
+<section class="section contact" id="iletisim">
+    <div class="container">
+        <div class="contact-grid">
+            <div class="contact-info">
+                <p class="eyebrow"><span class="dot"></span> İletişim</p>
+                <h2>Tabela projeniz için konuşalım</h2>
+                <p class="contact-lead">İşletmenizi anlatın; keşif, tasarım ve teklif sürecini biz yönetelim.</p>
+
+                <ul class="contact-cards">
+                    <li>
+                        <span class="cc-icon"><partial name="_Icon" model='"phone"' /></span>
+                        <div>
+                            <strong>Telefon</strong>
+                            <a href="tel:@Settings.Get("PhoneLink", "+905405505255")">@Settings.Get("PhoneDisplay", "0540 550 52 55")</a>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="cc-icon wa"><partial name="_Icon" model='"whatsapp"' /></span>
+                        <div>
+                            <strong>WhatsApp</strong>
+                            <a href="@wa" target="_blank" rel="noopener">Hemen yazın</a>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="cc-icon"><partial name="_Icon" model='"mail"' /></span>
+                        <div>
+                            <strong>E-posta</strong>
+                            <a href="mailto:@Settings.Get("Email", "")">@Settings.Get("Email", "")</a>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="cc-icon"><partial name="_Icon" model='"pin"' /></span>
+                        <div>
+                            <strong>Adres</strong>
+                            <span>@Html.Raw(Html.Encode(Settings.Get("Address", "")).Replace("\n", "<br />").Replace("\r", ""))</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="contact-form-wrap">
+                <form asp-controller="Contact" asp-action="Index" method="post" class="contact-form" novalidate="">
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                    <div class="form-row">
+                        <div class="field">
+                            <label asp-for="FullName"></label>
+                            <input asp-for="FullName" placeholder="Adınız ve soyadınız" />
+                            <span asp-validation-for="FullName" class="field-error"></span>
+                        </div>
+                        <div class="field">
+                            <label asp-for="Phone"></label>
+                            <input asp-for="Phone" placeholder="05xx xxx xx xx" />
+                            <span asp-validation-for="Phone" class="field-error"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="field">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" placeholder="ornek&#64;mail.com" />
+                            <span asp-validation-for="Email" class="field-error"></span>
+                        </div>
+                        <div class="field">
+                            <label asp-for="Company"></label>
+                            <input asp-for="Company" placeholder="Firma adı (opsiyonel)" />
+                            <span asp-validation-for="Company" class="field-error"></span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Subject"></label>
+                        <input asp-for="Subject" placeholder="Konu (opsiyonel)" />
+                        <span asp-validation-for="Subject" class="field-error"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Message"></label>
+                        <textarea asp-for="Message" rows="5" placeholder="İşletmeniz, tabela ihtiyacınız ve varsa ölçülerinizi kısaca anlatın."></textarea>
+                        <span asp-validation-for="Message" class="field-error"></span>
+                    </div>
+                    <div asp-validation-summary="All" class="field-error summary"></div>
+                    <button type="submit" class="btn btn-primary btn-wide">Teklif Talebi Gönder</button>
+                </form>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(map))
+        {
+            <div class="map-wrap">
+                <iframe src="@map" loading="lazy" title="Konum haritası" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+            </div>
+        }
+    </div>
+</section>

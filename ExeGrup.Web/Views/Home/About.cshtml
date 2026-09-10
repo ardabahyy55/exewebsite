@@ -1,0 +1,59 @@
+@{
+    ViewData["ActiveNav"] = "hakkimizda";
+    var wa = Settings.WaLink();
+}
+<partial name="_PageHead" model='("Hakkımızda", "EXE GRUP — tabela.exe: Samsun Atakum’da dış mekan tabela ve dış cephe reklam uygulamaları.")' />
+
+<section class="section">
+    <div class="container about-grid">
+        <div class="about-copy">
+            <p class="eyebrow"><span class="dot"></span> Hakkımızda</p>
+            <h2 class="section-title">Dış mekan tabelada üretim ve montajı birlikte yürütüyoruz</h2>
+            <p><strong>@Settings.Get("CompanyName", "EXE GRUP")</strong>, <strong>@Settings.Get("CompanySubBrand", "tabela.exe")</strong> markasıyla Samsun Atakum Küçük Sanayi Sitesi’nde dış mekan tabela ve dış cephe reklam uygulamaları üreten bir reklam firmasıdır. Kompozit tabela, kompozit kutu harf, ışıklı tabela, kutu harf ve kurumsal tabela başlıklarında hizmet veriyoruz.</p>
+            <p>Üretim tarafında CNC kesim ve lazer kesim, pleksi ve metal/kompozit işçiliği yapılır. Her proje; yerinde keşif ve ölçü ile başlar, tasarım ve projelendirmeyle netleşir, üretim ve kalite kontrol sonrası yerinde montajla tamamlanır.</p>
+            <p>Mağaza ve işletme tabelalarından fabrika ve kurum cephesine kadar farklı ölçeklerde çalışıyoruz. Amacımız basittir: işletmenizin cephesine, doğru malzemeyle üretilmiş ve düzgün monte edilmiş bir tabela kazandırmak.</p>
+        </div>
+        <aside class="about-side">
+            <h3>Çalışma prensiplerimiz</h3>
+            <ul class="principle-list">
+                <li><partial name="_Icon" model='"check"' /><span>Ölçüye dayalı üretim — tahminle değil, yerinde keşifle çalışırız.</span></li>
+                <li><partial name="_Icon" model='"check"' /><span>Net iletişim — teklif, takvim ve aşamalar baştan paylaşılır.</span></li>
+                <li><partial name="_Icon" model='"check"' /><span>Uygun malzeme — cephe koşullarına göre kompozit, pleksi ya da metal.</span></li>
+                <li><partial name="_Icon" model='"check"' /><span>Düzgün montaj — güvenli ekip ve taşıyıcı sistemlerle uygulama.</span></li>
+            </ul>
+            <a class="btn btn-primary btn-wide" href="@wa" target="_blank" rel="noopener"><partial name="_Icon" model='"whatsapp"' /> WhatsApp'tan Yazın</a>
+        </aside>
+    </div>
+</section>
+
+<section class="section section-tint">
+    <div class="container">
+        <h2 class="section-title center">Nasıl çalışıyoruz?</h2>
+        <div class="process-grid">
+            @foreach (var (no, title, text) in new[]
+            {
+                ("01", "Keşif & İhtiyaç Analizi", "Yerinde ölçü ve ihtiyaç analizi."),
+                ("02", "Tasarım & Projelendirme", "Markanıza uygun tasarım ve proje."),
+                ("03", "Üretim", "CNC ve lazer kesimle üretim."),
+                ("04", "Kalite Kontrol", "Malzeme, yüzey ve aydınlatma kontrolü."),
+                ("05", "Montaj", "Yerinde güvenli dış cephe uygulaması."),
+                ("06", "Teslim", "Teslim ve bilgilendirme.")
+            })
+            {
+                <div class="process-step">
+                    <span class="process-no">@no</span>
+                    <h3>@title</h3>
+                    <p>@text</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="cta-band">
+    <div class="container cta-inner">
+        <h2>Projenizi konuşalım.</h2>
+        <p>Keşif ve teklif sürecine bugün başlayalım.</p>
+        <a class="btn btn-dark btn-lg" href="/iletisim">İletişim Sayfasına Git</a>
+    </div>
+</section>

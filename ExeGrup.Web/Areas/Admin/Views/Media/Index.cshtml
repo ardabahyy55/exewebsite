@@ -1,0 +1,44 @@
+@{
+    ViewData["Title"] = "Medya Kütüphanesi";
+    var files = ViewBag.Files as List<string> ?? new();
+}
+<div class="apage-head">
+    <div><h1>Medya Kütüphanesi</h1><p>@files.Count dosya.</p></div>
+</div>
+
+<div class="acard">
+    <div class="acard-head"><h2>Dosya yükle</h2></div>
+    <form method="post" enctype="multipart/form-data" action="/ardabahaadmin/medya/yukle" class="aform">
+        @Html.AntiForgeryToken()
+        <div class="afield">
+            <label>Dosyalar (jpg, jpeg, png, webp — en fazla 5 MB)</label>
+            <input type="file" name="files" accept=".jpg,.jpeg,.png,.webp" multiple />
+        </div>
+        <button type="submit" class="abtn abtn-primary">Yükle</button>
+    </form>
+</div>
+
+<div class="acard">
+    <div class="acard-head"><h2>Yüklü dosyalar</h2></div>
+    @if (files.Any())
+    {
+        <div class="aimage-grid">
+            @foreach (var f in files)
+            {
+                <div class="aimage-item">
+                    <img src="@f" alt="" loading="lazy" />
+                    <small class="text-muted breakable">@f</small>
+                    <form method="post" action="/ardabahaadmin/medya/sil" onsubmit="return confirm('Bu dosyayı silmek istediğinize emin misiniz? İçeriklerde kullanılıyorsa görsel bozulur.')">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="path" value="@f" />
+                        <button type="submit" class="abtn abtn-sm abtn-danger">Sil</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="aempty">Henüz dosya yok.</p>
+    }
+</div>

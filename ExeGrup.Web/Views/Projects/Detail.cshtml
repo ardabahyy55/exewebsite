@@ -1,0 +1,79 @@
+@model Project
+@{
+    ViewData["ActiveNav"] = "projeler";
+    var wa = Settings.WaLink();
+}
+<section class="page-head page-head-slim">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="Konum">
+            <a href="/">Ana Sayfa</a><span>/</span><a href="/projeler">Projeler</a><span>/</span><b>@Model.Name</b>
+        </nav>
+        <h1>@Model.Name</h1>
+        <p class="page-head-sub">@Model.ShortDescription</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="detail-media project-hero">
+            <img src="@(string.IsNullOrWhiteSpace(Model.CoverImage) ? "/images/placeholder.svg" : Model.CoverImage)"
+                 alt="@Model.Name" width="1400" height="760" />
+        </div>
+
+        <div class="project-detail-grid">
+            <div class="detail-body">
+                <h2 class="detail-heading">Proje hakkında</h2>
+                @Html.Multiline(Model.Description)
+            </div>
+            <aside class="detail-side">
+                <h3>Proje bilgisi</h3>
+                <ul class="spec-list">
+                    <li><span>Kategori</span><b>@Model.Category</b></li>
+                    <li><span>Tarih</span><b>@Model.Date.ToString("MM.yyyy")</b></li>
+                    @if (!string.IsNullOrWhiteSpace(Model.Material))
+                    {
+                        <li><span>Malzeme</span><b>@Model.Material</b></li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.ApplicationType))
+                    {
+                        <li><span>Uygulama Türü</span><b>@Model.ApplicationType</b></li>
+                    }
+                </ul>
+                <a class="btn btn-primary btn-wide" href="@wa" target="_blank" rel="noopener"><partial name="_Icon" model='"whatsapp"' /> Benzer Proje İçin Yazın</a>
+            </aside>
+        </div>
+
+        @if (Model.Images.Any())
+        {
+            <h2 class="section-title gallery-subtitle">Proje galerisi</h2>
+            <div class="gallery-grid">
+                @foreach (var img in Model.Images)
+                {
+                    <button type="button" class="gallery-item lightbox-trigger" data-src="@img.ImagePath" data-alt="@Model.Name">
+                        <img src="@img.ImagePath" alt="@Model.Name" loading="lazy" width="480" height="360" />
+                    </button>
+                }
+            </div>
+        }
+
+        @if (ViewBag.Related is List<Project> related && related.Any())
+        {
+            <h2 class="section-title gallery-subtitle">Benzer projeler</h2>
+            <div class="projects-grid">
+                @foreach (var p in related)
+                {
+                    <a class="project-card" href="/projeler/@p.Slug">
+                        <div class="card-media">
+                            <img src="@(string.IsNullOrWhiteSpace(p.CoverImage) ? "/images/placeholder.svg" : p.CoverImage)"
+                                 alt="@p.Name" loading="lazy" width="640" height="420" />
+                        </div>
+                        <div class="project-meta">
+                            <span class="chip">@p.Category</span>
+                            <h3>@p.Name</h3>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+    </div>
+</section>

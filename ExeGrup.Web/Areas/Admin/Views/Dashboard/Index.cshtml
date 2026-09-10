@@ -1,0 +1,42 @@
+@{
+    ViewData["Title"] = "Kontrol Paneli";
+    var recent = ViewBag.RecentMessages as List<ContactMessage> ?? new();
+}
+<div class="apage-head">
+    <div><h1>Kontrol Paneli</h1><p>Site içeriğinin genel durumu.</p></div>
+    <a class="abtn abtn-primary" href="/ardabahaadmin/projeler/yeni">+ Yeni Proje</a>
+</div>
+
+<div class="stat-grid">
+    <div class="stat-card"><span class="stat-label">Toplam Proje</span><span class="stat-value">@ViewBag.TotalProjects</span></div>
+    <div class="stat-card"><span class="stat-label">Toplam Hizmet</span><span class="stat-value">@ViewBag.TotalServices</span></div>
+    <div class="stat-card"><span class="stat-label">Toplam Görsel</span><span class="stat-value">@ViewBag.TotalImages</span></div>
+    <div class="stat-card"><span class="stat-label">Yeni Mesajlar</span><span class="stat-value">@ViewBag.NewMessages</span></div>
+</div>
+
+<div class="acard">
+    <div class="acard-head"><h2>Son mesajlar</h2><a class="abtn abtn-ghost" href="/ardabahaadmin/mesajlar">Tümü</a></div>
+    @if (recent.Any())
+    {
+        <div class="atable-wrap">
+            <table class="atable">
+                <thead><tr><th>Ad Soyad</th><th>Konu</th><th>Tarih</th><th>Durum</th></tr></thead>
+                <tbody>
+                    @foreach (var m in recent)
+                    {
+                        <tr class="@(m.IsRead ? "" : "row-unread")">
+                            <td><a class="row-link" href="/ardabahaadmin/mesajlar/@m.Id">@m.FullName</a></td>
+                            <td>@(string.IsNullOrWhiteSpace(m.Subject) ? "—" : m.Subject)</td>
+                            <td>@m.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@if (m.IsRead) { <span class="chip chip-grey">Okundu</span> } else { <span class="chip chip-amber">Okunmadı</span> }</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="aempty">Henüz mesaj yok.</p>
+    }
+</div>

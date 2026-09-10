@@ -1,0 +1,39 @@
+@model List<GalleryImage>
+@{
+    ViewData["ActiveNav"] = "galeri";
+    var categories = new List<string> { "Dış Mekan Tabela", "Kompozit", "Kutu Harf", "Işıklı Tabela", "Cephe Uygulamaları" };
+    var wa = Settings.WaLink();
+}
+<partial name="_PageHead" model='("Galeri", "Projelerimizden görseller — tabela, kutu harf ve cephe uygulamaları.")' />
+
+<section class="section">
+    <div class="container">
+        @if (Model.Any())
+        {
+            <div class="filter-bar" role="tablist" aria-label="Galeri filtresi">
+                <button type="button" class="filter-btn active" data-filter="all">Tümü</button>
+                @foreach (var c in categories)
+                {
+                    <button type="button" class="filter-btn" data-filter="@c">@c</button>
+                }
+            </div>
+
+            <div class="gallery-grid" id="galleryGrid">
+                @foreach (var g in Model)
+                {
+                    <button type="button" class="gallery-item lightbox-trigger" data-category="@g.Category" data-src="@g.ImagePath" data-alt="@(g.Title ?? g.Category)">
+                        <img src="@g.ImagePath" alt="@(g.Title ?? g.Category)" loading="lazy" width="480" height="360" />
+                        <span class="gallery-tag">@g.Category</span>
+                    </button>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-note">
+                <p>Galeri görsellerimiz kısa sürede eklenecek.</p>
+                <a class="btn btn-primary" href="@wa" target="_blank" rel="noopener"><partial name="_Icon" model='"whatsapp"' /> WhatsApp'tan yazın</a>
+            </div>
+        }
+    </div>
+</section>

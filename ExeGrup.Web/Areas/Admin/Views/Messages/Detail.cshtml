@@ -1,0 +1,33 @@
+@model ContactMessage
+@{
+    ViewData["Title"] = "Mesaj Detayı";
+}
+<div class="apage-head">
+    <div><h1>Mesaj Detayı</h1><p>@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p></div>
+    <a class="abtn abtn-ghost" href="/ardabahaadmin/mesajlar">← Mesajlara Dön</a>
+</div>
+
+<div class="acard">
+    <dl class="adetail">
+        <div><dt>Ad Soyad</dt><dd>@Model.FullName</dd></div>
+        <div><dt>Telefon</dt><dd><a href="tel:@Model.Phone">@Model.Phone</a></dd></div>
+        <div><dt>E-posta</dt><dd><a href="mailto:@Model.Email">@Model.Email</a></dd></div>
+        <div><dt>Firma</dt><dd>@(string.IsNullOrWhiteSpace(Model.Company) ? "—" : Model.Company)</dd></div>
+        <div><dt>Konu</dt><dd>@(string.IsNullOrWhiteSpace(Model.Subject) ? "—" : Model.Subject)</dd></div>
+        <div><dt>Durum</dt><dd>@if (Model.IsRead) { <span class="chip chip-grey">Okundu</span> } else { <span class="chip chip-amber">Okunmadı</span> }</dd></div>
+        <div class="full"><dt>Mesaj</dt><dd class="prewrap">@Model.Message</dd></div>
+    </dl>
+
+    <div class="adetail-actions">
+        <a class="abtn abtn-primary" href="tel:@Model.Phone">Ara</a>
+        <a class="abtn abtn-ghost" href="mailto:@Model.Email">E-posta Gönder</a>
+        <form method="post" action="/ardabahaadmin/mesajlar/@Model.Id/okundu">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="abtn abtn-ghost">Okundu/Okunmadı Çevir</button>
+        </form>
+        <form method="post" action="/ardabahaadmin/mesajlar/sil/@Model.Id" onsubmit="return confirm('Bu mesajı silmek istediğinize emin misiniz?')">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="abtn abtn-danger">Sil</button>
+        </form>
+    </div>
+</div>

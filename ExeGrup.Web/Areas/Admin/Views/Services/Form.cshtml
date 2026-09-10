@@ -1,0 +1,67 @@
+@model ServiceFormViewModel
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Yeni Hizmet" : "Hizmeti Düzenle";
+    var action = Model.Id == 0 ? "yeni" : $"duzenle/{Model.Id}";
+}
+<div class="apage-head">
+    <div><h1>@(Model.Id == 0 ? "Yeni Hizmet" : "Hizmeti Düzenle")</h1></div>
+    <a class="abtn abtn-ghost" href="/ardabahaadmin/hizmetler">← Listeye Dön</a>
+</div>
+
+<form method="post" enctype="multipart/form-data" action="/ardabahaadmin/hizmetler/@action" class="acard aform">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Image" />
+
+    <div class="aform-grid">
+        <div class="afield span2">
+            <label asp-for="Title">Başlık *</label>
+            <input asp-for="Title" data-slug-target="Slug2" />
+            <span asp-validation-for="Title" class="aerror"></span>
+        </div>
+        <div class="afield">
+            <label asp-for="Slug">Slug *</label>
+            <input asp-for="Slug" id="Slug2" />
+            <small class="ahint">URL: /@((Model.Slug ?? "hizmet-slug"))</small>
+            <span asp-validation-for="Slug" class="aerror"></span>
+        </div>
+        <div class="afield">
+            <label asp-for="SortOrder">Sıra</label>
+            <input asp-for="SortOrder" type="number" />
+            <small class="ahint">Küçük değer önce görünür.</small>
+        </div>
+        <div class="afield span2">
+            <label asp-for="ShortDescription">Kısa Açıklama *</label>
+            <textarea asp-for="ShortDescription" rows="2"></textarea>
+            <span asp-validation-for="ShortDescription" class="aerror"></span>
+        </div>
+        <div class="afield span2">
+            <label asp-for="Description">Detaylı Açıklama *</label>
+            <textarea asp-for="Description" rows="8"></textarea>
+            <span asp-validation-for="Description" class="aerror"></span>
+        </div>
+        <div class="afield">
+            <label asp-for="ImageFile">Görsel @(Model.Id == 0 ? "" : "(değiştirmek için seçin)")</label>
+            @if (!string.IsNullOrWhiteSpace(Model.Image))
+            {
+                <img class="aupload-preview" src="@Model.Image" alt="Mevcut görsel" loading="lazy" />
+            }
+            <input asp-for="ImageFile" type="file" accept=".jpg,.jpeg,.png,.webp" />
+        </div>
+        <div class="afield">
+            <label asp-for="SeoTitle">SEO Title</label>
+            <input asp-for="SeoTitle" />
+        </div>
+        <div class="afield span2">
+            <label asp-for="SeoDescription">SEO Description</label>
+            <textarea asp-for="SeoDescription" rows="2"></textarea>
+        </div>
+        <div class="afield acheck span2">
+            <input asp-for="IsActive" type="checkbox" />
+            <label asp-for="IsActive">Aktif</label>
+        </div>
+    </div>
+
+    <div asp-validation-summary="All" class="aerror"></div>
+    <button type="submit" class="abtn abtn-primary">Kaydet</button>
+</form>

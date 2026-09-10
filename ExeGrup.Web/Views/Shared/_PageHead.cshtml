@@ -1,0 +1,11 @@
+@model (string Title, string Sub)
+<section class="page-head">
+    <div class="container">
+        <p class="eyebrow light">EXE GRUP <span>/</span> tabela.exe</p>
+        <h1>@Model.Title</h1>
+        @if (!string.IsNullOrWhiteSpace(Model.Sub))
+        {
+            <p class="page-head-sub">@Model.Sub</p>
+        }
+    </div>
+</section>

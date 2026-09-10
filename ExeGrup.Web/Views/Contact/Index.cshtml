@@ -1,0 +1,7 @@
+@model ContactFormViewModel
+@{
+    ViewData["ActiveNav"] = "iletisim";
+    ViewData["ContactReturnUrl"] = "/iletisim";
+}
+<partial name="_PageHead" model='("İletişim", "Teklif, keşif ve proje süreçleri için bize ulaşın.")' />
+<partial name="_ContactSection" model="Model" />

@@ -1,0 +1,48 @@
+@model Service
+@{
+    var wa = Settings.WaLink();
+}
+<section class="page-head page-head-slim">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="Konum">
+            <a href="/">Ana Sayfa</a><span>/</span><a href="/hizmetler">Hizmetler</a><span>/</span><b>@Model.Title</b>
+        </nav>
+        <h1>@Model.Title</h1>
+        <p class="page-head-sub">@Model.ShortDescription</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container detail-grid">
+        <article class="detail-body">
+            <div class="detail-media">
+                <img src="@(string.IsNullOrWhiteSpace(Model.Image) ? "/images/placeholder.svg" : Model.Image)"
+                     alt="@Model.Title" width="1200" height="700" />
+            </div>
+            <h2 class="detail-heading">@Model.Title</h2>
+            @Html.Multiline(Model.Description)
+
+            <div class="detail-cta">
+                <p>Bu hizmet için keşif ve teklif sürecine bugün başlayabiliriz.</p>
+                <div class="detail-cta-actions">
+                    <a class="btn btn-primary" href="@wa" target="_blank" rel="noopener"><partial name="_Icon" model='"whatsapp"' /> WhatsApp'tan Teklif Al</a>
+                    <a class="btn btn-ghost-dark" href="tel:@Settings.Get("PhoneLink", "+905405505255")"><partial name="_Icon" model='"phone"' /> @Settings.Get("PhoneDisplay", "0540 550 52 55")</a>
+                </div>
+            </div>
+        </article>
+
+        @if (ViewBag.Others is List<Service> others && others.Any())
+        {
+            <aside class="detail-side">
+                <h3>Diğer hizmetler</h3>
+                <ul class="side-links">
+                    @foreach (var s in others)
+                    {
+                        <li><a href="/@s.Slug">@s.Title <partial name="_Icon" model='"arrow"' /></a></li>
+                    }
+                </ul>
+                <a class="btn btn-ghost-dark btn-wide" href="/hizmetler">Tüm Hizmetler</a>
+            </aside>
+        }
+    </div>
+</section>

@@ -1,0 +1,99 @@
+@model ProjectFormViewModel
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Yeni Proje" : "Projeyi Düzenle";
+    var action = Model.Id == 0 ? "yeni" : $"duzenle/{Model.Id}";
+}
+<div class="apage-head">
+    <div><h1>@(Model.Id == 0 ? "Yeni Proje" : "Projeyi Düzenle")</h1><p>Proje bilgilerini doldurun.</p></div>
+    <a class="abtn abtn-ghost" href="/ardabahaadmin/projeler">← Listeye Dön</a>
+</div>
+
+<form method="post" enctype="multipart/form-data" action="/ardabahaadmin/projeler/@action" class="acard aform">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CoverImage" />
+
+    <div class="aform-grid">
+        <div class="afield span2">
+            <label asp-for="Name">Proje Adı *</label>
+            <input asp-for="Name" data-slug-target="Slug" />
+            <span asp-validation-for="Name" class="aerror"></span>
+        </div>
+        <div class="afield">
+            <label asp-for="Slug">Slug (URL) *</label>
+            <input asp-for="Slug" id="Slug" />
+            <small class="ahint">Örn: merkez-kutuphane-kompozit-kutu-harf</small>
+            <span asp-validation-for="Slug" class="aerror"></span>
+        </div>
+        <div class="afield">
+            <label asp-for="Category">Kategori *</label>
+            <input asp-for="Category" list="catList" />
+            <datalist id="catList">
+                <option>Dış Mekan Tabela</option><option>Kompozit</option><option>Kutu Harf</option>
+                <option>Işıklı Tabela</option><option>Cephe Uygulamaları</option><option>Kurumsal Tabela</option>
+            </datalist>
+            <span asp-validation-for="Category" class="aerror"></span>
+        </div>
+        <div class="afield">
+            <label asp-for="Date">Tarih</label>
+            <input asp-for="Date" type="date" />
+        </div>
+        <div class="afield">
+            <label asp-for="Material">Malzeme</label>
+            <input asp-for="Material" placeholder="Örn: Kompozit + Pleksi + LED" />
+        </div>
+        <div class="afield">
+            <label asp-for="ApplicationType">Uygulama Türü</label>
+            <input asp-for="ApplicationType" placeholder="Örn: Cephe montajı, kutu harf" />
+        </div>
+        <div class="afield span2">
+            <label asp-for="ShortDescription">Kısa Açıklama *</label>
+            <textarea asp-for="ShortDescription" rows="2"></textarea>
+            <span asp-validation-for="ShortDescription" class="aerror"></span>
+        </div>
+        <div class="afield span2">
+            <label asp-for="Description">Detaylı Açıklama *</label>
+            <textarea asp-for="Description" rows="7"></textarea>
+            <span asp-validation-for="Description" class="aerror"></span>
+        </div>
+        <div class="afield">
+            <label asp-for="CoverImageFile">Kapak Görseli @(Model.Id == 0 ? "" : "(değiştirmek için seçin)")</label>
+            @if (!string.IsNullOrWhiteSpace(Model.CoverImage))
+            {
+                <img class="aupload-preview" src="@Model.CoverImage" alt="Mevcut kapak" loading="lazy" />
+            }
+            <input asp-for="CoverImageFile" type="file" accept=".jpg,.jpeg,.png,.webp" />
+            <small class="ahint">JPG, PNG veya WebP — en fazla 5 MB.</small>
+        </div>
+        <div class="afield">
+            <label asp-for="ImageFiles">Galeri Görselleri (çoklu seçim)</label>
+            <input asp-for="ImageFiles" type="file" accept=".jpg,.jpeg,.png,.webp" multiple />
+        </div>
+        <div class="afield acheck span2">
+            <input asp-for="IsActive" type="checkbox" />
+            <label asp-for="IsActive">Aktif (sitede görünür)</label>
+        </div>
+    </div>
+
+    <div asp-validation-summary="All" class="aerror"></div>
+    <button type="submit" class="abtn abtn-primary">Kaydet</button>
+</form>
+
+@if (Model.Images.Any())
+{
+    <div class="acard">
+        <div class="acard-head"><h2>Mevcut galeri görselleri</h2></div>
+        <div class="aimage-grid">
+            @foreach (var img in Model.Images)
+            {
+                <div class="aimage-item">
+                    <img src="@img.ImagePath" alt="" loading="lazy" />
+                    <form method="post" action="/ardabahaadmin/projeler/gorsel-sil/@img.Id" onsubmit="return confirm('Bu görseli silmek istediğinize emin misiniz?')">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="abtn abtn-sm abtn-danger">Sil</button>
+                    </form>
+                </div>
+            }
+        </div>
+    </div>
+}

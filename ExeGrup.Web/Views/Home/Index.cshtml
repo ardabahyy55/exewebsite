@@ -1,0 +1,214 @@
+@model HomeIndexViewModel
+@{
+    ViewData["ActiveNav"] = "anasayfa";
+    ViewData["Title"] = "EXE GRUP | tabela.exe — Samsun Dış Mekan Tabela ve Kutu Harf";
+    ViewData["MetaDescription"] = "Samsun ve Atakum'da dış mekan tabela, kompozit kutu harf, ışıklı tabela ve kurumsal cephe tabela üretimi. Keşif, tasarım, üretim ve montaj tek elden.";
+    var wa = Settings.WaLink();
+    var tickerItems = new List<string>
+    {
+        "Dış Mekan Tabela", "Kompozit Kutu Harf", "Işıklı Tabela", "Kutu Harf",
+        "Kurumsal Tabela", "Cephe Tabela", "CNC Kesim", "Lazer Kesim", "Montaj & Dış Cephe Uygulaması"
+    };
+}
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container hero-inner">
+        <p class="hero-eyebrow"><span class="dot"></span> @Settings.Get("CompanyName", "EXE GRUP") · @Settings.Get("CompanySubBrand", "tabela.exe") — Samsun</p>
+        <h1 class="hero-title">
+            İşletmenizin görünürlüğünü güçlendiren
+            <span class="hero-mark">dış mekan tabela</span> çözümleri
+        </h1>
+        <p class="hero-sub">Samsun ve çevresinde kompozit, kutu harf, ışıklı tabela ve kurumsal dış cephe uygulamaları.</p>
+        <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="@wa" target="_blank" rel="noopener">WhatsApp'tan Teklif Al</a>
+            <a class="btn btn-ghost btn-lg" href="/projeler">Projelerimizi İncele <partial name="_Icon" model='"arrow"' /></a>
+        </div>
+        <ul class="hero-facts">
+            <li>Keşif</li><li>Tasarım</li><li>Üretim</li><li>Montaj</li><li>Teslim</li>
+        </ul>
+    </div>
+</section>
+
+<!-- HİZMET ŞERİDİ -->
+<div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+        @for (var pass = 0; pass < 2; pass++)
+        {
+            foreach (var item in tickerItems)
+            {
+                <span class="ticker-item">@item</span><span class="ticker-sep">/</span>
+            }
+        }
+    </div>
+</div>
+
+<!-- TANITIM -->
+<section class="section intro">
+    <div class="container intro-grid">
+        <div>
+            <p class="eyebrow"><span class="dot"></span> Kimiz?</p>
+            <h2 class="section-title">Tasarımdan montaja, tabelanız tek elden</h2>
+        </div>
+        <div class="intro-copy">
+            <p><strong>@Settings.Get("CompanyName", "EXE GRUP")</strong>, <strong>@Settings.Get("CompanySubBrand", "tabela.exe")</strong> markasıyla Samsun Atakum'da dış mekan tabela ve dış cephe reklam uygulamaları üreten bir reklam firmasıdır. Kompozit tabela, kompozit kutu harf, ışıklı tabela ve kurumsal tabela başlıklarında; keşif, tasarım, üretim ve montaj süreçlerini tek elden yürütür.</p>
+            <p>Üretim alanımızda CNC ve lazer kesim, pleksi ile metal/kompozit işçiliği yapılır; her proje cephe ölçüsüne ve işletmenizin ihtiyacına göre planlanır. Samsun ve çevresinde yerinde keşif ve montaj hizmeti veriyoruz.</p>
+            <a class="link-arrow" href="/hakkimizda">Hakkımızda <partial name="_Icon" model='"arrow"' /></a>
+        </div>
+    </div>
+</section>
+
+<!-- HİZMETLER -->
+<section class="section section-tint" id="hizmetler">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow"><span class="dot"></span> Hizmetler</p>
+                <h2 class="section-title">Uzmanlık alanlarımız</h2>
+            </div>
+            <a class="link-arrow" href="/hizmetler">Tüm hizmetler <partial name="_Icon" model='"arrow"' /></a>
+        </div>
+
+        <div class="cards-grid">
+            @foreach (var s in Model.Services)
+            {
+                <a class="service-card" href="/@s.Slug">
+                    <div class="card-media">
+                        <img src="@(string.IsNullOrWhiteSpace(s.Image) ? "/images/placeholder.svg" : s.Image)"
+                             alt="@s.Title" loading="lazy" width="640" height="420" />
+                    </div>
+                    <div class="card-body">
+                        <h3>@s.Title</h3>
+                        <p>@s.ShortDescription</p>
+                        <span class="card-more">Detay <partial name="_Icon" model='"arrow"' /></span>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ÇALIŞMA SÜRECİ -->
+<section class="section">
+    <div class="container">
+        <p class="eyebrow"><span class="dot"></span> Çalışma Süreci</p>
+        <h2 class="section-title">Nasıl çalışıyoruz?</h2>
+        <div class="process-grid">
+            @foreach (var (no, title, text) in new[]
+            {
+                ("01", "Keşif & İhtiyaç Analizi", "Cephenizi yerinde görür, işletmenizin ihtiyacını ve bütçenizi birlikte netleştiririz."),
+                ("02", "Tasarım & Projelendirme", "Markanıza ve cephenize uygun tasarımı, ölçülü bir projeyle hazırlarız."),
+                ("03", "Üretim", "CNC ve lazer kesim, kompozit, pleksi ve metal işçiliğiyle projenizi üretiriz."),
+                ("04", "Kalite Kontrol", "Montaj öncesi tüm parçaları malzeme, yüzey ve aydınlatma açısından kontrol ederiz."),
+                ("05", "Montaj", "Dış cephe uygulamalarını güvenli ekip ve yöntemlerle yerinde tamamlarız."),
+                ("06", "Teslim", "Projenizi teslim eder, kullanım ve bakım konusunda bilgilendiririz.")
+            })
+            {
+                <div class="process-step">
+                    <span class="process-no">@no</span>
+                    <h3>@title</h3>
+                    <p>@text</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@if (Model.Projects.Any())
+{
+    <!-- ÖNE ÇIKAN PROJELER -->
+    <section class="section section-dark" id="projeler">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow light"><span class="dot"></span> Projeler</p>
+                    <h2 class="section-title light">Öne çıkan projeler</h2>
+                </div>
+                <a class="link-arrow light" href="/projeler">Tüm projeler <partial name="_Icon" model='"arrow"' /></a>
+            </div>
+            <div class="projects-grid">
+                @foreach (var p in Model.Projects)
+                {
+                    <a class="project-card" href="/projeler/@p.Slug">
+                        <div class="card-media">
+                            <img src="@(string.IsNullOrWhiteSpace(p.CoverImage) ? "/images/placeholder.svg" : p.CoverImage)"
+                                 alt="@p.Name" loading="lazy" width="640" height="420" />
+                        </div>
+                        <div class="project-meta">
+                            <span class="chip">@p.Category</span>
+                            <h3>@p.Name</h3>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- NEDEN TABELA.EXE -->
+<section class="section section-contrast">
+    <div class="container why-grid">
+        <div>
+            <p class="eyebrow light"><span class="dot"></span> Neden tabela.exe?</p>
+            <h2 class="section-title light">Tabelanız, işletmenizin ilk sözüdür</h2>
+            <p class="why-lead">Müşteriniz binanıza bakarken karar verir. Bu yüzden her projede doğru malzemeyi, doğru ölçüyü ve düzgün montajı önemsiyoruz.</p>
+        </div>
+        <ul class="why-list">
+            <li>
+                <h3>Uçtan uca tek elden</h3>
+                <p>Keşif, tasarım, üretim ve montaj aynı ekibin planlamasında ilerler; sürecin hiçbir aşamasında yönlendirilmezsiniz.</p>
+            </li>
+            <li>
+                <h3>Doğru malzeme seçimi</h3>
+                <p>Kompozit, pleksi ve metal seçeneklerini cephe koşullarınıza göre değerlendirir; gereksiz maliyete yönlendirilmezsiniz.</p>
+            </li>
+            <li>
+                <h3>Şeffaf süreç</h3>
+                <p>Net teklif, net takvim. Projenin her aşamasında ne yapıldığını bilirsiniz.</p>
+            </li>
+            <li>
+                <h3>Samsun'da yerinde uygulama</h3>
+                <p>Samsun ve çevresinde yerinde keşif ve montaj yapar; teslim sonrası da ulaşılabilir kalırız.</p>
+            </li>
+        </ul>
+    </div>
+</section>
+
+@if (Model.Gallery.Any())
+{
+    <!-- GALERİ ÖNİZLEME -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow"><span class="dot"></span> Galeri</p>
+                    <h2 class="section-title">Çalışmalarımızdan kareler</h2>
+                </div>
+                <a class="link-arrow" href="/galeri">Tüm galeri <partial name="_Icon" model='"arrow"' /></a>
+            </div>
+            <div class="gallery-grid">
+                @foreach (var g in Model.Gallery)
+                {
+                    <button type="button" class="gallery-item lightbox-trigger" data-src="@g.ImagePath" data-alt="@(g.Title ?? g.Category)">
+                        <img src="@g.ImagePath" alt="@(g.Title ?? g.Category)" loading="lazy" width="480" height="360" />
+                    </button>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- WHATSAPP CTA -->
+<section class="cta-band">
+    <div class="container cta-inner">
+        <h2>Projeniz için teklif alın.</h2>
+        <p>Ölçü, malzeme ve maliyeti netleştirip size somut bir teklif sunalım.</p>
+        <a class="btn btn-dark btn-lg" href="@wa" target="_blank" rel="noopener">
+            <partial name="_Icon" model='"whatsapp"' /> WhatsApp'tan Yazın
+        </a>
+    </div>
+</section>
+
+<!-- İLETİŞİM -->
+@{ ViewData["ContactReturnUrl"] = "/"; }
+<partial name="_ContactSection" model="new ContactFormViewModel()" />

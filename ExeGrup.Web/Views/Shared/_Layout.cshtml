@@ -1,0 +1,105 @@
+@using System.Text.Json
+@inject ExeGrup.Web.Data.AppDbContext Db
+@{
+    var company = Settings.Get("CompanyName", "EXE GRUP");
+    var subBrand = Settings.Get("CompanySubBrand", "tabela.exe");
+    var title = ViewData["Title"] as string ?? Settings.Get("SeoTitle", "EXE GRUP | tabela.exe");
+    var desc = ViewData["MetaDescription"] as string ?? Settings.Get("SeoDescription", "");
+    var siteUrl = Settings.Get("SiteUrl", "").TrimEnd('/');
+    var rawPath = Context.Request.Path.Value ?? "/";
+    var canonical = siteUrl + (rawPath == "/" ? "" : rawPath.ToLowerInvariant());
+    var ogImage = ViewData["OgImage"] as string;
+    var ogImageUrl = string.IsNullOrWhiteSpace(ogImage)
+        ? siteUrl + "/images/placeholder.svg"
+        : (ogImage.StartsWith("http") ? ogImage : siteUrl + ogImage);
+    var favicon = Settings.Get("FaviconPath", "");
+    var faviconUrl = string.IsNullOrWhiteSpace(favicon) ? "/images/favicon.svg" : favicon;
+    var logo = Settings.Get("LogoPath", "");
+    var wa = Settings.WaLink();
+    var phoneDisplay = Settings.Get("PhoneDisplay", "0540 550 52 55");
+    var phoneLink = Settings.Get("PhoneLink", "+905405505255");
+    var email = Settings.Get("Email", "");
+    var activeNav = ViewData["ActiveNav"] as string ?? "";
+    var footerServices = await Db.Services.AsNoTracking().Where(s => s.IsActive).OrderBy(s => s.SortOrder).Take(6).ToListAsync();
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@title</title>
+    <meta name="description" content="@desc" />
+    <link rel="canonical" href="@canonical" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="@company — @subBrand" />
+    <meta property="og:title" content="@title" />
+    <meta property="og:description" content="@desc" />
+    <meta property="og:url" content="@canonical" />
+    <meta property="og:image" content="@ogImageUrl" />
+    <meta property="og:locale" content="tr_TR" />
+    <link rel="icon" href="@faviconUrl" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script type="application/ld+json">
+        @Html.Raw(JsonSerializer.Serialize(new Dictionary<string, object>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "LocalBusiness",
+            ["name"] = $"{company} — {subBrand}",
+            ["description"] = desc,
+            ["url"] = siteUrl,
+            ["telephone"] = "+" + phoneLink.Replace("+", ""),
+            ["email"] = email,
+            ["image"] = ogImageUrl,
+            ["address"] = new Dictionary<string, object>
+            {
+                ["@type"] = "PostalAddress",
+                ["streetAddress"] = Settings.Get("Address", "").Replace("\n", ", "),
+                ["addressLocality"] = "Atakum",
+                ["addressRegion"] = "Samsun",
+                ["postalCode"] = "55200",
+                ["addressCountry"] = "TR"
+            },
+            ["sameAs"] = new List<string> { Settings.Get("Instagram", "") },
+            ["areaServed"] = "Samsun, Atakum ve çevresi"
+        }))
+    </script>
+</head>
+<body>
+    @await Html.PartialAsync("_Header")
+
+    <main id="top">
+        @if (TempData["ContactSuccess"] as bool? == true)
+        {
+            <div class="toast-success" role="status">
+                <partial name="_Icon" model='"check"' />
+                <span>Talebiniz başarıyla alınmıştır. En kısa sürede sizinle iletişime geçeceğiz.</span>
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    @await Html.PartialAsync("_Footer", footerServices)
+
+    <a class="ws-float" href="@wa" target="_blank" rel="noopener" aria-label="WhatsApp'tan yazın">
+        <partial name="_Icon" model='"whatsapp"' />
+    </a>
+
+    <a class="mobile-cta" href="@wa" target="_blank" rel="noopener">
+        <partial name="_Icon" model='"whatsapp"' />
+        <span>WhatsApp'tan Teklif Al</span>
+    </a>
+
+    <div class="lightbox" id="lightbox" hidden>
+        <button class="lb-close" type="button" aria-label="Kapat"><partial name="_Icon" model='"close"' /></button>
+        <button class="lb-prev" type="button" aria-label="Önceki"><partial name="_Icon" model='"chevron-left"' /></button>
+        <figure><img src="" alt="" /></figure>
+        <button class="lb-next" type="button" aria-label="Sonraki"><partial name="_Icon" model='"chevron-right"' /></button>
+    </div>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,39 @@
+@model List<Service>
+@{
+    ViewData["Title"] = "Hizmetler";
+}
+<div class="apage-head">
+    <div><h1>Hizmetler</h1><p>@Model.Count hizmet kayıtı.</p></div>
+    <a class="abtn abtn-primary" href="/ardabahaadmin/hizmetler/yeni">+ Yeni Hizmet</a>
+</div>
+
+<div class="acard">
+    <div class="atable-wrap">
+        <table class="atable">
+            <thead><tr><th>Sıra</th><th>Başlık</th><th>URL</th><th>Durum</th><th class="th-actions">İşlem</th></tr></thead>
+            <tbody>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td>@s.SortOrder</td>
+                        <td><a class="row-link" href="/ardabahaadmin/hizmetler/duzenle/@s.Id">@s.Title</a></td>
+                        <td><small class="text-muted">/@s.Slug</small></td>
+                        <td>
+                            <form method="post" action="/ardabahaadmin/hizmetler/durum/@s.Id">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="chip @(s.IsActive ? "chip-green" : "chip-grey") chip-btn">@(s.IsActive ? "Aktif" : "Pasif")</button>
+                            </form>
+                        </td>
+                        <td class="td-actions">
+                            <a class="abtn abtn-sm" href="/ardabahaadmin/hizmetler/duzenle/@s.Id">Düzenle</a>
+                            <form method="post" action="/ardabahaadmin/hizmetler/sil/@s.Id" onsubmit="return confirm('Bu hizmeti silmek istediğinize emin misiniz?')">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="abtn abtn-sm abtn-danger">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+## Visual Studio / .NET Core
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.sln.docstates
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+
+## SQLite temporary files
+*.db-wal
+*.db-shm
+
+## OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini

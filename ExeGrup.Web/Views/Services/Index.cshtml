@@ -1,0 +1,35 @@
+@model List<Service>
+@{
+    ViewData["ActiveNav"] = "hizmetler";
+    var wa = Settings.WaLink();
+}
+<partial name="_PageHead" model='("Hizmetler", "Dış mekan tabela, kompozit kutu harf, ışıklı tabela ve kurumsal cephe tabela çözümleri — Samsun." )' />
+
+<section class="section">
+    <div class="container">
+        <div class="cards-grid cards-grid-lg">
+            @foreach (var s in Model)
+            {
+                <a class="service-card" href="/@s.Slug">
+                    <div class="card-media">
+                        <img src="@(string.IsNullOrWhiteSpace(s.Image) ? "/images/placeholder.svg" : s.Image)"
+                             alt="@s.Title" loading="lazy" width="640" height="420" />
+                    </div>
+                    <div class="card-body">
+                        <h3>@s.Title</h3>
+                        <p>@s.ShortDescription</p>
+                        <span class="card-more">Detay <partial name="_Icon" model='"arrow"' /></span>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="cta-band">
+    <div class="container cta-inner">
+        <h2>Hangi hizmet size uygun?</h2>
+        <p>İşletmenizi anlatın, doğru tabela türünü birlikte belirleyelim.</p>
+        <a class="btn btn-dark btn-lg" href="@wa" target="_blank" rel="noopener"><partial name="_Icon" model='"whatsapp"' /> WhatsApp'tan Teklif Al</a>
+    </div>
+</section>

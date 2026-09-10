@@ -1,0 +1,40 @@
+@{
+    var logo = Settings.Get("LogoPath", "");
+    var company = Settings.Get("CompanyName", "EXE GRUP");
+    var subBrand = Settings.Get("CompanySubBrand", "tabela.exe");
+    var wa = Settings.WaLink();
+    var active = ViewData["ActiveNav"] as string ?? "";
+    var isHome = active == "" || active == "anasayfa";
+}
+<header class="site-header @(isHome ? "header-transparent" : "")" id="siteHeader">
+    <div class="container header-inner">
+        <a class="brand" href="/">
+            @if (!string.IsNullOrWhiteSpace(logo))
+            {
+                <img src="@logo" alt="@company @subBrand" class="brand-img" />
+            }
+            else
+            {
+                <span class="brand-mark">E<span class="brand-dot">.</span></span>
+                <span class="brand-text">
+                    <span class="brand-top">@company</span>
+                    <span class="brand-main">@subBrand</span>
+                </span>
+            }
+        </a>
+
+        <nav class="main-nav" id="mainNav" aria-label="Ana menü">
+            <a href="/" class="@(active == "anasayfa" || (string.IsNullOrEmpty(active)) ? "active" : "")">Ana Sayfa</a>
+            <a href="/hizmetler" class="@(active == "hizmetler" ? "active" : "")">Hizmetler</a>
+            <a href="/projeler" class="@(active == "projeler" ? "active" : "")">Projeler</a>
+            <a href="/galeri" class="@(active == "galeri" ? "active" : "")">Galeri</a>
+            <a href="/hakkimizda" class="@(active == "hakkimizda" ? "active" : "")">Hakkımızda</a>
+            <a href="/iletisim" class="@(active == "iletisim" ? "active" : "")">İletişim</a>
+            <a class="btn btn-primary nav-cta" href="@wa" target="_blank" rel="noopener">Teklif Al</a>
+        </nav>
+
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Menüyü aç/kapat" aria-expanded="false">
+            <partial name="_Icon" model='"menu"' />
+        </button>
+    </div>
+</header>

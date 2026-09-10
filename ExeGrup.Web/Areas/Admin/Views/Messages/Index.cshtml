@@ -1,0 +1,47 @@
+@model List<ContactMessage>
+@{
+    ViewData["Title"] = "Mesajlar";
+    var filter = ViewBag.Filter as string;
+}
+<div class="apage-head">
+    <div><h1>Mesajlar</h1><p>İletişim formundan gelen talepler.</p></div>
+    <div class="filter-inline">
+        <a class="abtn @(filter == null ? "abtn-primary" : "abtn-ghost")" href="/ardabahaadmin/mesajlar">Tümü</a>
+        <a class="abtn @(filter == "okunmamis" ? "abtn-primary" : "abtn-ghost")" href="/ardabahaadmin/mesajlar?durum=okunmamis">Okunmamış</a>
+    </div>
+</div>
+
+<div class="acard">
+    @if (Model.Any())
+    {
+        <div class="atable-wrap">
+            <table class="atable">
+                <thead><tr><th>Ad Soyad</th><th>Telefon</th><th>E-posta</th><th>Konu</th><th>Tarih</th><th>Durum</th><th class="th-actions">İşlem</th></tr></thead>
+                <tbody>
+                    @foreach (var m in Model)
+                    {
+                        <tr class="@(m.IsRead ? "" : "row-unread")">
+                            <td><a class="row-link" href="/ardabahaadmin/mesajlar/@m.Id">@m.FullName</a></td>
+                            <td>@m.Phone</td>
+                            <td>@m.Email</td>
+                            <td>@(string.IsNullOrWhiteSpace(m.Subject) ? "—" : m.Subject)</td>
+                            <td>@m.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@if (m.IsRead) { <span class="chip chip-grey">Okundu</span> } else { <span class="chip chip-amber">Okunmadı</span> }</td>
+                            <td class="td-actions">
+                                <a class="abtn abtn-sm" href="/ardabahaadmin/mesajlar/@m.Id">Detay</a>
+                                <form method="post" action="/ardabahaadmin/mesajlar/sil/@m.Id" onsubmit="return confirm('Bu mesajı silmek istediğinize emin misiniz?')">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="abtn abtn-sm abtn-danger">Sil</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="aempty">Mesaj yok.</p>
+    }
+</div>

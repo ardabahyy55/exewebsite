@@ -1,0 +1,51 @@
+@model List<Project>
+@{
+    ViewData["Title"] = "Projeler";
+}
+<div class="apage-head">
+    <div><h1>Projeler</h1><p>@Model.Count proje kayıtı.</p></div>
+    <a class="abtn abtn-primary" href="/ardabahaadmin/projeler/yeni">+ Yeni Proje</a>
+</div>
+
+<div class="acard">
+    @if (Model.Any())
+    {
+        <div class="atable-wrap">
+            <table class="atable">
+                <thead>
+                    <tr><th></th><th>Proje</th><th>Kategori</th><th>Tarih</th><th>Durum</th><th class="th-actions">İşlem</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td class="td-thumb"><img src="@(string.IsNullOrWhiteSpace(p.CoverImage) ? "/images/placeholder.svg" : p.CoverImage)" alt="" loading="lazy" /></td>
+                            <td><a class="row-link" href="/ardabahaadmin/projeler/duzenle/@p.Id">@p.Name</a><br /><small class="text-muted">/projeler/@p.Slug</small></td>
+                            <td>@p.Category</td>
+                            <td>@p.Date.ToString("dd.MM.yyyy")</td>
+                            <td>
+                                <form method="post" action="/ardabahaadmin/projeler/durum/@p.Id">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="chip @(p.IsActive ? "chip-green" : "chip-grey") chip-btn">
+                                        @(p.IsActive ? "Aktif" : "Pasif")
+                                    </button>
+                                </form>
+                            </td>
+                            <td class="td-actions">
+                                <a class="abtn abtn-sm" href="/ardabahaadmin/projeler/duzenle/@p.Id">Düzenle</a>
+                                <form method="post" action="/ardabahaadmin/projeler/sil/@p.Id" onsubmit="return confirm('Bu projeyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="abtn abtn-sm abtn-danger">Sil</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="aempty">Henüz proje yok. "Yeni Proje" ile ilk projenizi ekleyin.</p>
+    }
+</div>
