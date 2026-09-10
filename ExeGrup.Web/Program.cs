@@ -14,8 +14,19 @@ CultureInfo.DefaultThreadCurrentUICulture = tr;
 builder.Services.AddControllersWithViews();
 builder.Services.AddAntiforgery(o => o.Cookie.Name = "exegrup.af");
 
+var connStr = builder.Configuration.GetConnectionString("Default") ?? "Data Source=exegrup.db";
+if (connStr.Contains("Data Source="))
+{
+    var rawPath = connStr.Substring("Data Source=".Length).Trim();
+    if (!Path.IsPathRooted(rawPath))
+    {
+        var fullDbPath = Path.Combine(builder.Environment.ContentRootPath, rawPath);
+        connStr = $"Data Source={fullDbPath}";
+    }
+}
+
 builder.Services.AddDbContext<AppDbContext>(o =>
-    o.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+    o.UseSqlite(connStr));
 
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ISettingsService, SettingsService>();
